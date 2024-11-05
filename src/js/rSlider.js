@@ -126,32 +126,35 @@
 
 	RS.prototype.createScale = function (resize) {
 		this.step = this.sliderWidth / (this.conf.values.length - 1);
-		const fragment = document.createDocumentFragment();
 
-		for (let i = 0, iLen = this.conf.values.length; i < iLen; i++) {
-			const span = createElement('span');
-			const ins = createElement('ins');
-
-			span.appendChild(ins);
-			fragment.appendChild(span);
-
-			span.style.width = i === iLen - 1 ? '0px' : `${this.step}px`;
-
-			if (!this.conf.labels) {
-				if (i === 0 || i === iLen - 1) {
+		if (this.conf.scale) {
+			const fragment = document.createDocumentFragment();
+	
+			for (let i = 0, iLen = this.conf.values.length; i < iLen; i++) {
+				const span = createElement('span');
+				const ins = createElement('ins');
+	
+				span.appendChild(ins);
+				fragment.appendChild(span);
+	
+				span.style.width = i === iLen - 1 ? '0px' : `${this.step}px`;
+	
+				if (!this.conf.labels) {
+					if (i === 0 || i === iLen - 1) {
+						ins.innerHTML = this.conf.values[i];
+					}
+				} else {
 					ins.innerHTML = this.conf.values[i];
 				}
-			} else {
-				ins.innerHTML = this.conf.values[i];
 			}
+	
+			this.scale.appendChild(fragment);
+	
+			Array.from(this.scale.children).forEach(span => {
+				const ins = span.firstChild;
+				ins.style.marginLeft = `${(ins.clientWidth / 2) * -1}px`;
+			});
 		}
-
-		this.scale.appendChild(fragment);
-
-		Array.from(this.scale.children).forEach(span => {
-			const ins = span.firstChild;
-			ins.style.marginLeft = `${(ins.clientWidth / 2) * -1}px`;
-		});
 
 		return this.addEvents();
 	};
